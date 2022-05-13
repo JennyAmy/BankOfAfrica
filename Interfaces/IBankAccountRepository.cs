@@ -12,9 +12,12 @@ namespace BankOfAfricaAPI.Interfaces
         Task<bool> ConfirmExistingEmail(string email, int customerId);
         void CreateAccount(BankAccount createAccount);
         string GenerateAccountNumber();
+        string GenerateReferenceNumber();
         Task<BankAccount> GetAccountDetailsByAccountNo(string accountNo);
         Task<BankAccount> GetAccountDetailsById(int customerId);
         Task<BankAccount> GetAccountOfficerByUserId(int customerId);
+        Task<Transaction> GetCreditDetailsById(int appUserId);
+        Task<Transaction> GetDebitDetailsById(int appUserId);
         Task<bool> isAccountNumberExisting(string accountNo);
         Task<bool> NINAlreadyExists(string nin);
     }

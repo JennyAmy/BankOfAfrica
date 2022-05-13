@@ -95,6 +95,24 @@ namespace BankOfAfricaAPI.Repos
             context.Transactions.Add(transaction);
         }
 
+        public async Task<Transaction> GetDebitDetailsById(int appUserId)
+        {
+            var details = await context.Transactions
+                .Where(x => x.SenderId == appUserId)
+                .FirstOrDefaultAsync();
+
+            return details;
+        }
+
+        public async Task<Transaction> GetCreditDetailsById(int appUserId)
+        {
+            var details = await context.Transactions
+                .Where(x => x.ReceiverId == appUserId)
+                .FirstOrDefaultAsync();
+
+            return details;
+        }
+
 
         public string GenerateAccountNumber()
         {
@@ -119,6 +137,45 @@ namespace BankOfAfricaAPI.Repos
                     lastAccountNumber = long.Parse(account.AccountNumber);
                     newAccountNumber = lastAccountNumber + 1;
                     stringnewAccountNumber = newAccountNumber.ToString("D10");
+
+
+                }
+                catch (Exception error)
+                {
+
+                    throw new Exception(error.Message);
+                }
+                return stringnewAccountNumber;
+            }
+
+
+        }
+
+
+
+        public string GenerateReferenceNumber()
+        {
+
+            if (!context.Transactions.Any())
+            {
+                string referenceNumber;
+                //string begin = "";
+                Random random = new Random();
+                referenceNumber = random.Next(0, 999999999).ToString();
+                return referenceNumber;
+            }
+            else
+            {
+                int maxID = context.Transactions.Max(acc => acc.TransactionId);
+                var account = context.Transactions.FirstOrDefault(ac => ac.TransactionId == maxID);
+
+                long lastReferenceNumber, newReferenceNumber;
+                string stringnewAccountNumber;
+                try
+                {
+                    lastReferenceNumber = long.Parse(account.ReferenceNumber);
+                    newReferenceNumber = lastReferenceNumber + 1;
+                    stringnewAccountNumber = newReferenceNumber.ToString("D10");
 
 
                 }

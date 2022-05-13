@@ -90,6 +90,14 @@ namespace BankOfAfricaAPI.Repos
 
             return user;
         }
+        public async Task<AppUser> GetUserByUserId(int userId)
+        {
+            var user = await context.AppUsers
+                .Where(x => x.AppUserId == userId)
+                .FirstOrDefaultAsync();
+
+            return user;
+        }
 
     }
 }

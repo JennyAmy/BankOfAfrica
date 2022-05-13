@@ -12,6 +12,7 @@ namespace BankOfAfricaAPI.Interfaces
         Task<bool> UserAlreadyExists(string accountNo);
         Task<AppUser> GetUserByAccountNo(string accountNo);
         Task<bool> UserIsValidatedByemail(string email);
+        Task<AppUser> GetUserByUserId(int userId);
         //Task<bool> ValidateAccount(string bvn, int cardDigits);
     }
 }

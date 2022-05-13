@@ -27,10 +27,12 @@ namespace BankOfAfricaAPI.Controllers
         [HttpPut("transfer")]
         public async Task<IActionResult> Transfer(decimal amount, string accountNo, TransactionDTO transactionDTO)
         {
-            //var loggedInUserId = GetUserId();
-            var loggedInUserId = 1;
-            var sender = await unitOfWork.BankAccountRepository.GetAccountDetailsById(loggedInUserId);
+            var loggedInUserId = GetUserId();
+            var customer = await unitOfWork.AppUserRepository.GetUserByUserId(loggedInUserId);
+            //var loggedInUserId = 1;
+            var sender = await unitOfWork.BankAccountRepository.GetAccountDetailsById(customer.CustomerId);
             var receiver = await unitOfWork.BankAccountRepository.GetAccountDetailsByAccountNo(accountNo);
+            var receiverAppId = await unitOfWork.AppUserRepository.GetUserByAccountNo(accountNo);
             var transaction = mapper.Map<Transaction>(transactionDTO);
  
             if(accountNo != sender.AccountNumber)
@@ -49,10 +51,11 @@ namespace BankOfAfricaAPI.Controllers
 
                     //Log the transaction in transactions table
                     transaction.SenderId = loggedInUserId;
-                    transaction.ReceiverId = receiver.CustomerId;
+                    transaction.ReceiverId = receiverAppId.AppUserId;
                     transaction.SenderAccountNo = sender.AccountNumber;
                     transaction.ReceiverAccountNo = accountNo;
                     transaction.AmountSent = amount;
+                    transaction.ReferenceNumber = unitOfWork.BankAccountRepository.GenerateReferenceNumber();
 
                     //mapper.Map(transactionDTO, transaction);
                     unitOfWork.BankAccountRepository.AddTransaction(transaction);
@@ -70,5 +73,30 @@ namespace BankOfAfricaAPI.Controllers
             await unitOfWork.SaveAsync();
             return Ok("Transfer of " + amount + " successfully transferred to " + receiver.Firstname + " " + receiver.Surname);
         }
+
+        [HttpGet("get-user-debit-details")]
+        public async Task<IActionResult> GetDebitDetailsById()
+        {
+            var loggedInUser = GetUserId();
+
+            var details = await unitOfWork.BankAccountRepository.GetDebitDetailsById(loggedInUser);
+            var debitDetails = mapper.Map<TransactionDTO>(details);
+            return Ok(debitDetails);
+
+
+        }
+
+        [HttpGet("get-user-credit-details")]
+        public async Task<IActionResult> GetCreditDetailsById()
+        {
+            var loggedInUser = GetUserId();
+
+            var details = await unitOfWork.BankAccountRepository.GetCreditDetailsById(loggedInUser);
+            var creditDetails = mapper.Map<TransactionDTO>(details);
+            return Ok(creditDetails);
+
+
+        }
+
     }
 }

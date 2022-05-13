@@ -5,6 +5,7 @@ namespace BankOfAfricaAPI.Entities
     public class Transaction
     {
         public int TransactionId { get; set; }
+        public string ReferenceNumber { get; set; }
         public int SenderId { get; set; }
         public int ReceiverId { get; set; }
         public string SenderAccountNo { get; set; }

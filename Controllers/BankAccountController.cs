@@ -71,22 +71,25 @@ namespace BankOfAfricaAPI.Controllers
         }
 
 
-        [HttpGet("get-details/{customerId}")]
-        public async Task<IActionResult> GetDetailsById(int customerId)
+        [HttpGet("get-details}")]
+        public async Task<IActionResult> GetDetailsById()
         {
-            //var loggedInUser = GetUserId();
+            var loggedInUser = GetUserId();
+            var customer = await unitOfWork.AppUserRepository.GetUserByUserId(loggedInUser);
 
-            var details = await unitOfWork.BankAccountRepository.GetAccountDetailsById(customerId);
+            var details = await unitOfWork.BankAccountRepository.GetAccountDetailsById(customer.CustomerId);
             var userDetails = mapper.Map<BankAccountDTO>(details);
             return Ok(userDetails);
 
 
         }
 
-        [HttpGet("get-accountofficer{customerId}")]
-        public async Task<IActionResult> GetAccountOfficer(int customerId)
+        [HttpGet("get-accountofficer")]
+        public async Task<IActionResult> GetAccountOfficer()
         {
-                var accountOfficer = await unitOfWork.BankAccountRepository.GetAccountOfficerByUserId(customerId);
+            var loggedInUser = GetUserId();
+            var customer = await unitOfWork.AppUserRepository.GetUserByUserId(loggedInUser);
+            var accountOfficer = await unitOfWork.BankAccountRepository.GetAccountOfficerByUserId(customer.CustomerId);
                 var userDetails = mapper.Map<BankAccountDTO>(accountOfficer);
                 return Ok(userDetails);
         }
