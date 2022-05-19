@@ -74,7 +74,7 @@ namespace BankOfAfricaAPI.Controllers
             return Ok("Transfer of " + amount + " successfully transferred to " + receiver.Firstname + " " + receiver.Surname);
         }
 
-        [HttpGet("get-user-debit-details")]
+        [HttpGet("get-debit-details")]
         public async Task<IActionResult> GetDebitDetailsById()
         {
             var loggedInUser = GetUserId();
@@ -86,7 +86,7 @@ namespace BankOfAfricaAPI.Controllers
 
         }
 
-        [HttpGet("get-user-credit-details")]
+        [HttpGet("get-credit-details")]
         public async Task<IActionResult> GetCreditDetailsById()
         {
             var loggedInUser = GetUserId();

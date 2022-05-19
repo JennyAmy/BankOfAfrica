@@ -71,7 +71,7 @@ namespace BankOfAfricaAPI.Controllers
         }
 
 
-        [HttpGet("get-details}")]
+        [HttpGet("get-details")]
         public async Task<IActionResult> GetDetailsById()
         {
             var loggedInUser = GetUserId();

@@ -21,7 +21,6 @@ C:\Users\Jennifer.Oliseynum\Documents\Projects\MainProjects\BankOfAfricaApp\Bank
 C:\Users\Jennifer.Oliseynum\Documents\Projects\MainProjects\BankOfAfricaApp\BankOfAfricaAPI\obj\Debug\net5.0\scopedcss\bundle\BankOfAfricaAPI.styles.css
 C:\Users\Jennifer.Oliseynum\Documents\Projects\MainProjects\BankOfAfricaApp\BankOfAfricaAPI\obj\Debug\net5.0\staticwebassets\BankOfAfricaAPI.StaticWebAssets.Manifest.cache
 C:\Users\Jennifer.Oliseynum\Documents\Projects\MainProjects\BankOfAfricaApp\BankOfAfricaAPI\obj\Debug\net5.0\BankOfAfricaAPI.RazorTargetAssemblyInfo.cache
-C:\Users\Jennifer.Oliseynum\Documents\Projects\MainProjects\BankOfAfricaApp\BankOfAfricaAPI\obj\Debug\net5.0\BankOfAfricaAPI.csproj.CopyComplete
 C:\Users\Jennifer.Oliseynum\Documents\Projects\MainProjects\BankOfAfricaApp\BankOfAfricaAPI\obj\Debug\net5.0\BankOfAfricaAPI.dll
 C:\Users\Jennifer.Oliseynum\Documents\Projects\MainProjects\BankOfAfricaApp\BankOfAfricaAPI\obj\Debug\net5.0\ref\BankOfAfricaAPI.dll
 C:\Users\Jennifer.Oliseynum\Documents\Projects\MainProjects\BankOfAfricaApp\BankOfAfricaAPI\obj\Debug\net5.0\BankOfAfricaAPI.pdb
