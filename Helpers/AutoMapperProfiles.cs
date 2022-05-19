@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BankOfAfricaAPI.DTOs.AppUser;
 using BankOfAfricaAPI.DTOs.BankDTO;
 using BankOfAfricaAPI.Entities;
 
@@ -10,6 +11,8 @@ namespace BankOfAfricaAPI.Helpers
         {
             CreateMap<BankAccount, BankAccountDTO>().ReverseMap();
             CreateMap<Transaction, TransactionDTO>().ReverseMap();
+
+            CreateMap<AppUser, CreateAppUserDTO>().ReverseMap();
         }
     }
 }
