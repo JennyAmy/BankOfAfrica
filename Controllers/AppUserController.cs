@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using BankOfAfricaAPI.DTOs.AppUser;
 using BankOfAfricaAPI.DTOs.BankDTO;
 using BankOfAfricaAPI.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BankOfAfricaAPI.Controllers
@@ -59,6 +62,16 @@ namespace BankOfAfricaAPI.Controllers
             await unitOfWork.SaveAsync();
             return StatusCode(200);
 
+        }
+
+        [HttpGet("users")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetUsers()
+        {
+            var users = await unitOfWork.AppUserRepository.GetUsers();
+
+            var usersDTO = mapper.Map<IEnumerable<CreateAppUserDTO>>(users);
+            return Ok(usersDTO);
         }
 
     }

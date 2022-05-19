@@ -3,6 +3,7 @@ using BankOfAfricaAPI.DTOs.AppUser;
 using BankOfAfricaAPI.Entities;
 using BankOfAfricaAPI.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -97,6 +98,11 @@ namespace BankOfAfricaAPI.Repos
                 .FirstOrDefaultAsync();
 
             return user;
+        }
+
+        public async Task<IEnumerable<AppUser>> GetUsers()
+        {
+            return await context.AppUsers.ToListAsync();
         }
 
     }

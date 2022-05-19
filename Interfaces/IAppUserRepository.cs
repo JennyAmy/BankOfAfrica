@@ -1,5 +1,6 @@
 ﻿using BankOfAfricaAPI.DTOs.AppUser;
 using BankOfAfricaAPI.Entities;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BankOfAfricaAPI.Interfaces
@@ -13,6 +14,7 @@ namespace BankOfAfricaAPI.Interfaces
         Task<AppUser> GetUserByAccountNo(string accountNo);
         Task<bool> UserIsValidatedByemail(string email);
         Task<AppUser> GetUserByUserId(int userId);
+        Task<IEnumerable<AppUser>> GetUsers();
         //Task<bool> ValidateAccount(string bvn, int cardDigits);
     }
 }
