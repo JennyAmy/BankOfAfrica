@@ -23,6 +23,7 @@ namespace BankOfAfricaAPI.DTOs.BankDTO
         public string NIN { get; set; }
         public int AccountType { get; set; }
         public int CustomerId { get; set; }
+        public decimal AccountBal { get; set; }
         public string AccountNumber { get; set; }
         public string AccountOfficerName { get; set; }
         public string AccountOfficerEmail { get; set; }

@@ -17,7 +17,7 @@ namespace BankOfAfricaAPI.Entities
         public string Email { get; set; }       
         public byte[] Password { get; set; }
         public byte[] PasswordKey { get; set; }
-        public bool IsValidated { get; set; }
+        public bool IsValidated { get; set; } = true;
         public DateTime DateTimeCreated { get; set; } = DateTime.Now;
     }
 }

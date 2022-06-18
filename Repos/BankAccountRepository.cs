@@ -37,6 +37,11 @@ namespace BankOfAfricaAPI.Repos
             return await context.BankAccounts.AnyAsync(x => x.NIN == nin);
         }
 
+        public async Task<bool> EmailAlreadyExists(string email)
+        {
+            return await context.BankAccounts.AnyAsync(x => x.Email == email);
+        }
+
         public async Task<bool> BVNAlreadyExists(string bvn)
         {
             return await context.BankAccounts.AnyAsync(x => x.BVN == bvn);
@@ -52,9 +57,9 @@ namespace BankOfAfricaAPI.Repos
 
         }
 
-        public async Task<bool> ConfirmExistingEmail(string email, int customerId)
+        public async Task<bool> ConfirmExistingEmail(string email)
         {
-            return await context.BankAccounts.AnyAsync(x => x.Email == email && x.CustomerId == customerId);
+            return await context.BankAccounts.AnyAsync(x => x.Email == email);
         }
 
         public async Task<bool> isAccountNumberExisting(string accountNo)

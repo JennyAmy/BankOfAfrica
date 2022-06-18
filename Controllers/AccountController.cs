@@ -32,21 +32,28 @@ namespace BankOfAfricaAPI.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(CreateAppUserDTO createAppUserDTO)
         {
+            var customer = await unitOfWork.BankAccountRepository.GetAccountDetailsByAccountNo(createAppUserDTO.AccountNumber);
+            //var appUser = await unitOfWork.AppUserRepository.GetUserByAccountNo(createAppUserDTO.AccountNumber);
             if (createAppUserDTO.Email.IsEmpty() || createAppUserDTO.Password.IsEmpty())
             {
-                return BadRequest("Email or password cannot be empty");
+                return BadRequest(new { status = false, message = "Email or password cannot be empty" });
             }
 
-            if (!await unitOfWork.BankAccountRepository.isAccountNumberExisting(createAppUserDTO.AccountNumber))
-                return BadRequest("Customer with this account number is not recognised. Please open a bank account to use the app");
-
             if (await unitOfWork.AppUserRepository.UserAlreadyExists(createAppUserDTO.AccountNumber))
-                return BadRequest("User with this account number already exists, please login to your account");
-           
+                return BadRequest(new { status = false, message = "User with this account number already exists, please login to your account" });
+
+            if (!await unitOfWork.BankAccountRepository.isAccountNumberExisting(createAppUserDTO.AccountNumber))
+            {
+                return BadRequest(new { status = false, message = "Customer with this account number is not recognised. Please open a bank account to use the app" });
+            }
+            else
+            {
+                createAppUserDTO.CustomerId = customer.CustomerId;
+            }
 
             unitOfWork.AppUserRepository.Register(createAppUserDTO);
             await unitOfWork.SaveAsync();
-            return StatusCode(201);
+            return Ok(new { status = true, message = true});
         }
 
         [HttpPost("login")]
@@ -57,19 +64,20 @@ namespace BankOfAfricaAPI.Controllers
 
             if (user == null)
             {
-                return Unauthorized("Invalid Username or Password");
+                return Unauthorized(new { status = false, message = "Invalid Email or Password" });
             }
 
             if(!userIsValidated)
             {
-                return Unauthorized("You have not validated your account. Please validate to proceed"); /// Then immeditely route the user to validation page
+                return Unauthorized(new { status = false, message = "You have not validated your account. Please validate to proceed" });  /// Then immeditely route the user to validation page
+                
             }
 
             var loginResponse = new LoginResponseDTO();
             loginResponse.Firstname = user.Firstname;
             loginResponse.Token = CreateJWT(user);
 
-            return Ok(loginResponse);
+            return Ok(new { status = true, message = loginResponse });
 
         }
 

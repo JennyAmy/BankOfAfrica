@@ -9,8 +9,9 @@ namespace BankOfAfricaAPI.Interfaces
         void AddTransaction(Transaction transaction);
         Task<bool> BVNAlreadyExists(string bvn);
         bool CardIsValid(int cardDgits);
-        Task<bool> ConfirmExistingEmail(string email, int customerId);
+        Task<bool> ConfirmExistingEmail(string email);
         void CreateAccount(BankAccount createAccount);
+        Task<bool> EmailAlreadyExists(string email);
         string GenerateAccountNumber();
         string GenerateReferenceNumber();
         Task<BankAccount> GetAccountDetailsByAccountNo(string accountNo);

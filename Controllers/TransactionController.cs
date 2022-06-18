@@ -24,54 +24,59 @@ namespace BankOfAfricaAPI.Controllers
         }
 
 
-        [HttpPut("transfer")]
+        [HttpPut("transfer/{amount}/{accountNo}")]
         public async Task<IActionResult> Transfer(decimal amount, string accountNo, TransactionDTO transactionDTO)
         {
             var loggedInUserId = GetUserId();
+            var isAccountExisiting = await unitOfWork.BankAccountRepository.isAccountNumberExisting(accountNo);
             var customer = await unitOfWork.AppUserRepository.GetUserByUserId(loggedInUserId);
-            //var loggedInUserId = 1;
             var sender = await unitOfWork.BankAccountRepository.GetAccountDetailsById(customer.CustomerId);
             var receiver = await unitOfWork.BankAccountRepository.GetAccountDetailsByAccountNo(accountNo);
             var receiverAppId = await unitOfWork.AppUserRepository.GetUserByAccountNo(accountNo);
             var transaction = mapper.Map<Transaction>(transactionDTO);
- 
-            if(accountNo != sender.AccountNumber)
+
+            if (isAccountExisiting)
             {
-                if (amount < sender.AccountBal) //Check if the sender's account bal is less than amount about to be sent
+                if (accountNo != sender.AccountNumber)
                 {
-                    //First debit the user
-                    sender.AccountBal = sender.AccountBal - amount;
-                    sender.LastUpdatedBy = loggedInUserId;
-                    sender.LastUpdatedOn = DateTime.Now;
+                    if (amount < sender.AccountBal) //Check if the sender's account bal is less than amount about to be sent
+                    {
+                        //First debit the user
+                        sender.AccountBal = sender.AccountBal - amount;
+                        sender.LastUpdatedBy = loggedInUserId;
+                        sender.LastUpdatedOn = DateTime.Now;
 
-                    //Then credit the user
-                    receiver.AccountBal = receiver.AccountBal + amount;
-                    receiver.LastUpdatedOn = DateTime.Now;
-                    receiver.LastUpdatedBy = loggedInUserId;
+                        //Then credit the user
+                        receiver.AccountBal = receiver.AccountBal + amount;
+                        receiver.LastUpdatedOn = DateTime.Now;
+                        receiver.LastUpdatedBy = loggedInUserId;
 
-                    //Log the transaction in transactions table
-                    transaction.SenderId = loggedInUserId;
-                    transaction.ReceiverId = receiverAppId.AppUserId;
-                    transaction.SenderAccountNo = sender.AccountNumber;
-                    transaction.ReceiverAccountNo = accountNo;
-                    transaction.AmountSent = amount;
-                    transaction.ReferenceNumber = unitOfWork.BankAccountRepository.GenerateReferenceNumber();
+                        //Log the transaction in transactions table
+                        transaction.SenderId = loggedInUserId;
+                        transaction.ReceiverId = receiverAppId.AppUserId;
+                        transaction.SenderAccountNo = sender.AccountNumber;
+                        transaction.ReceiverAccountNo = accountNo;
+                        transaction.AmountSent = amount;
+                        transaction.ReferenceNumber = unitOfWork.BankAccountRepository.GenerateReferenceNumber();
 
-                    //mapper.Map(transactionDTO, transaction);
-                    unitOfWork.BankAccountRepository.AddTransaction(transaction);
+                        //mapper.Map(transactionDTO, transaction);
+                        unitOfWork.BankAccountRepository.AddTransaction(transaction);
+                    }
+                    else
+                    {
+                        return BadRequest(new { status = false, message = "Insufficient balance to carry out this transaction" });
+                    }
                 }
                 else
                 {
-                    return BadRequest("Insufficient balance to carry out this transaction");
+                    return BadRequest(new { status = false, message = "You cannot transfer money to your own account" });
                 }
+                await unitOfWork.SaveAsync();
+                return Ok(new { status = true, message = "Transfer of " + amount + " successfully transferred to " + receiver.Firstname + " " + receiver.Surname });
             }
-            else
-            {
-                return BadRequest("You cannot transfer money to your own account");
-            }
-              
-            await unitOfWork.SaveAsync();
-            return Ok("Transfer of " + amount + " successfully transferred to " + receiver.Firstname + " " + receiver.Surname);
+          return BadRequest(new { status = false, message = "Invalid Account number" });
+
+
         }
 
         [HttpGet("get-debit-details")]
@@ -81,7 +86,7 @@ namespace BankOfAfricaAPI.Controllers
 
             var details = await unitOfWork.BankAccountRepository.GetDebitDetailsById(loggedInUser);
             var debitDetails = mapper.Map<TransactionDTO>(details);
-            return Ok(debitDetails);
+            return Ok(new { status = true, data = debitDetails });
 
 
         }
@@ -93,7 +98,7 @@ namespace BankOfAfricaAPI.Controllers
 
             var details = await unitOfWork.BankAccountRepository.GetCreditDetailsById(loggedInUser);
             var creditDetails = mapper.Map<TransactionDTO>(details);
-            return Ok(creditDetails);
+            return Ok(new { status = true, data = creditDetails });
 
 
         }

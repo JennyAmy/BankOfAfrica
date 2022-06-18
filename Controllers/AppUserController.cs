@@ -32,7 +32,7 @@ namespace BankOfAfricaAPI.Controllers
         {
             var isUserExisiting = await unitOfWork.AppUserRepository.UserAlreadyExists(accountNo);
 
-            return isUserExisiting == true ? BadRequest("A user with this account number already exists. Please login") : StatusCode(200);
+            return isUserExisiting ? BadRequest("A user with this account number already exists. Please login") : StatusCode(200);
 
         }
 
@@ -41,7 +41,7 @@ namespace BankOfAfricaAPI.Controllers
         {
             var user = await unitOfWork.AppUserRepository.GetUserByAccountNo(accountNo);
             var userIsValidated = await unitOfWork.AppUserRepository.UserIsValidated(accountNo);
-            var isUserExisiting = await unitOfWork.AppUserRepository.UserAlreadyExists(user.AccountNumber);
+            var isUserExisiting = await unitOfWork.AppUserRepository.UserAlreadyExists(accountNo);
 
             if (isUserExisiting == true)
             {
@@ -51,28 +51,28 @@ namespace BankOfAfricaAPI.Controllers
                 }
                 else
                 {
-                    return BadRequest("This account has already been validated. Please login");
+                    return BadRequest(new { status = false, message = "This account has already been validated. Please login" });
                 }
             }
             else
             {
-                return NotFound("User not found. Please create an account");
+                return NotFound(new { status = false, message = "User not found. Please create an account" });
             }
 
             await unitOfWork.SaveAsync();
-            return StatusCode(200);
+            return Ok(new { status = false, message = true});
 
         }
 
-        [HttpGet("users")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetUsers()
-        {
-            var users = await unitOfWork.AppUserRepository.GetUsers();
+        //[HttpGet("users")]
+        //[AllowAnonymous]
+        //public async Task<IActionResult> GetUsers()
+        //{
+        //    var users = await unitOfWork.AppUserRepository.GetUsers();
 
-            var usersDTO = mapper.Map<IEnumerable<CreateAppUserDTO>>(users);
-            return Ok(usersDTO);
-        }
+        //    var usersDTO = mapper.Map<IEnumerable<CreateAppUserDTO>>(users);
+        //    return Ok(usersDTO);
+        //}
 
     }
 }
