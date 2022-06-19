@@ -12,6 +12,7 @@ namespace BankOfAfricaAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TransactionController : BaseController
     {
         private readonly IMapper mapper;
@@ -24,6 +25,7 @@ namespace BankOfAfricaAPI.Controllers
         }
 
 
+       
         [HttpPut("transfer/{amount}/{accountNo}")]
         public async Task<IActionResult> Transfer(decimal amount, string accountNo, TransactionDTO transactionDTO)
         {
@@ -72,14 +74,14 @@ namespace BankOfAfricaAPI.Controllers
                     return BadRequest(new { status = false, message = "You cannot transfer money to your own account" });
                 }
                 await unitOfWork.SaveAsync();
-                return Ok(new { status = true, message = "Transfer of " + amount + " successfully transferred to " + receiver.Firstname + " " + receiver.Surname });
+                return Ok(new { status = true, message = "You have successfully transferred " + amount + " to " + receiver.Firstname + " " + receiver.Surname });
             }
           return BadRequest(new { status = false, message = "Invalid Account number" });
 
 
         }
 
-        [HttpGet("get-debit-details")]
+        [HttpGet("get-debit-details")]   ///Refactor to a single endpoint. Use unique characteristics to filter and display accordingly
         public async Task<IActionResult> GetDebitDetailsById()
         {
             var loggedInUser = GetUserId();
@@ -87,8 +89,6 @@ namespace BankOfAfricaAPI.Controllers
             var details = await unitOfWork.BankAccountRepository.GetDebitDetailsById(loggedInUser);
             var debitDetails = mapper.Map<TransactionDTO>(details);
             return Ok(new { status = true, data = debitDetails });
-
-
         }
 
         [HttpGet("get-credit-details")]

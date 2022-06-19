@@ -3,6 +3,7 @@ using BankOfAfricaAPI.DTOs.BankDTO;
 using BankOfAfricaAPI.Entities;
 using BankOfAfricaAPI.Extensions;
 using BankOfAfricaAPI.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -69,7 +70,7 @@ namespace BankOfAfricaAPI.Controllers
 
         }
 
-
+        [Authorize]
         [HttpGet("get-details")]
         public async Task<IActionResult> GetDetailsById()
         {
@@ -83,6 +84,7 @@ namespace BankOfAfricaAPI.Controllers
 
         }
 
+        [Authorize]
         [HttpGet("get-accountofficer")]
         public async Task<IActionResult> GetAccountOfficer()
         {
