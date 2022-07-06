@@ -57,6 +57,10 @@ namespace BankOfAfricaAPI.Controllers
         [HttpGet("get-details-accountNo/{accountNo}")]
         public async Task<IActionResult> GetDetailsByAccountNumber(string accountNo)
         {
+            if (accountNo.IsEmpty())
+            {
+                return BadRequest(new { status = false, message = "Account number cannot be empty" });
+            }
             var isAccountExisiting = await unitOfWork.BankAccountRepository.isAccountNumberExisting(accountNo);
 
             if (isAccountExisiting == true)
@@ -103,12 +107,30 @@ namespace BankOfAfricaAPI.Controllers
             return isAccountExisiting == true ? Ok(new { status = true, message = true }) :  BadRequest(new { status = false, message = "Account number: " + accountNo + " does not exist. Please open a bank account to access the internet banking app" });
         }
 
-        [HttpPost("is-email-exists")]
-        public async Task<IActionResult> ConfirmEmailExists(string email)  //To check if an email exists on the fly -- Immediately after input is made
+        [HttpPost("is-email-existing/{accountNo}/{email}")]
+        public async Task<IActionResult> ConfirmEmailExists(string accountNo, string email)  //To check if an email exists on the fly -- Immediately after input is made
         {
-            var isEmailExisting = await unitOfWork.BankAccountRepository.ConfirmExistingEmail(email);
+            if(accountNo != null)
+            {
+                var customer = await unitOfWork.BankAccountRepository.GetAccountDetailsByAccountNo(accountNo);
+                if (customer != null)
+                {
+                    if (customer.Email == email)
+                        return Ok(new { status = true, message = true });
+                }
+                else
+                {
+                    return BadRequest(new { status = false, message = "Account number: " + accountNo + " does not exist. Please open a bank account to access the internet banking app" });
 
-            return isEmailExisting ? Ok(new { status = true, message = true }) : BadRequest(new { status = false, message = "User with this email does not exist. Please open a bank account to access the internet banking app" });
+                }
+            }
+            else
+            {
+                return BadRequest(new { status = false, message = "Please input your account number" });
+            }
+           //var isEmailExisting = await unitOfWork.BankAccountRepository.ConfirmExistingEmail(email);
+
+           return BadRequest(new { status = false, message = "Invalid email address" });
 
         }
     }

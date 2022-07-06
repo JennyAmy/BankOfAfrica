@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "LhPMn5mDPsybuaCF5Pvs1hGbKXvL5uqWHmjQQNC7jcnTm60yGJEGQE0GZNS7zhsUWnMEeR4BZmjMX9fCqseRYg==",
+  "dgSpecHash": "d1WsZvN8LH/bMONSPfW+kZmZRj/2lGjUrR+es9L4mHSokICaiOUkbCwvdEoJAoiazkm/G6vhndnl8271V2Fy5A==",
   "success": true,
   "projectFilePath": "C:\\Users\\Jennifer.Oliseynum\\Documents\\Projects\\MainProjects\\BankOfAfricaApp\\BankOfAfricaAPI\\BankOfAfricaAPI.csproj",
   "expectedPackageFiles": [
@@ -105,8 +105,7 @@
     "C:\\Users\\Jennifer.Oliseynum\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\Jennifer.Oliseynum\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\Jennifer.Oliseynum\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\Jennifer.Oliseynum\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512",
-    "C:\\Users\\Jennifer.Oliseynum\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.13\\microsoft.netcore.app.host.win-x64.5.0.13.nupkg.sha512"
+    "C:\\Users\\Jennifer.Oliseynum\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512"
   ],
   "logs": []
 }
